@@ -14,7 +14,7 @@ def count_ways(amount, coins):
             path.pop()
 
     explore(0, [])
-    return len(result)
+    return (result)
 
 
 print(count_ways(10, [2, 5, 3, 6]))
