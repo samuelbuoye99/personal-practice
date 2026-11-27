@@ -1,36 +1,43 @@
-def has_path(grid: list[list[int]]):
+def has_path(grid):
     result = []
-    if grid[0][0] == 1:
-        return [result]
-    
-    def explore(path: list, row: int, col: int):
-        x = len(grid)
-        y = len(grid[0])
-        if path:
-            result.append(path[:])
+    x = len(grid)-1
+    y = len(grid[0])-1
 
-        for i in range(row, x):
-            for j in range(col, y):
-                if grid[i][j]==1:
-                    continue
-                if path and i>0 and j>0 and (path[-1] != i-1, j or path[-1] != i, j-1):
-                    continue
-                if path and i>0 and path[-1] != (i-1, j):
-                    continue
-                if path and j>0 and path[-1] != (i, j-1):
-                    continue
-                if row<x-1:
-                    path.append((i, j))
-                    explore(path, row+1, col)
-                    path.pop()
-                if col<y-1:
-                    path.append((i, j))
-                    explore(path, row, col+1)
-                    path.pop()
+    def explore(path, row, col):
+        if grid[0][0] == 1:
+            return
+        
+        if (row, col) == (x, y) and grid[row][col] == 0:
+            result.append(path[:]+[(row, col)])
+            return
+
+        if (row, col) == (0, 0):
+            path.append((row, col))
+            explore(path, row+1, col)
+            explore(path, row, col+1)
+            path.pop()
+
+        if row>0 and grid[row][col] == 0 and grid[row-1][col] == 0:
+            path.append((row, col))
+            if row<x:
+                explore(path, row+1, col)
+            if col<y:
+                explore(path, row, col+1)
+            path.pop()
+
+        if col>0 and grid[row][col] == 0 and grid[row][col-1] == 0:
+            path.append((row, col))
+            if row<x:
+                explore(path, row+1, col)
+            if col<y:
+                explore(path, row, col+1)
+            path.pop()
+
     explore([], 0, 0)
     return result
 
-
-print(has_path([[0, 1, 1],
-                [0, 1, 1],
-                [0, 0, 0]]))
+alll = has_path([[0, 0, 1],
+                 [1, 0, 0],
+                 [1, 0, 0]])
+for path in alll:
+    print(path)
